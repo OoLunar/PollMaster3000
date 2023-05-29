@@ -1,0 +1,24 @@
+{
+    "discord": {
+        "applicationId": "",
+        "githubUrl": "",
+        "publicKey": "",
+        "token": "",
+        "userAgent": ""
+    },
+    "logging": {
+        "level": "Debug",
+        "filename": "yyyy'-'MM'-'dd' 'HH'.'mm'.'ss",
+        "format": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u4}] {SourceContext}: {Message:lj}{NewLine}{Exception}",
+        "overrides": {
+            "Microsoft.EntityFrameworkCore": "Warning"
+        }
+    },
+    "server": {
+        "address": "10.13.13.15",
+        "basePath": "/",
+        "port": 8080,
+        "requestMemoryLimit": 65536,
+        "requestReadTimeout": 30
+    }
+}
