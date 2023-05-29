@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OoLunar.PollMaster3000.Authentication;
-using OoLunar.PollMaster3000.Controllers;
 using Remora.Discord.API.Extensions;
 using Serilog;
 using Serilog.Events;
@@ -96,7 +95,6 @@ namespace OoLunar.PollMaster3000
             });
 
             WebApplication app = builder.Build();
-            DiscordController.DiscordJsonSerializerOptions = app.Services.GetRequiredService<IOptionsSnapshot<JsonSerializerOptions>>().Get("Discord");
             //app.UseStaticFiles(new StaticFileOptions()
             //{
             //    // TODO: PollMaster3000.Docs, using csproj Tasks, docfx and possibly github actions.
