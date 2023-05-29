@@ -1,10 +1,10 @@
 using System;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Objects;
 
 namespace OoLunar.PollMaster3000.Controllers
@@ -25,16 +25,17 @@ namespace OoLunar.PollMaster3000.Controllers
         }
 
         [HttpPost]
-        public async ValueTask<IActionResult> PostAsync()
+        public IActionResult PostAsync()
         {
-            Interaction? interaction = await HttpContext.Request.ReadFromJsonAsync<Interaction>(_jsonSerializerOptions);
+            _logger.LogInformation("Received.");
+            Interaction? interaction = JsonSerializer.Deserialize<Interaction>(HttpContext.Request.Body, _jsonSerializerOptions);
             if (interaction is null)
             {
                 return BadRequest();
             }
 
-            _logger.LogInformation("Received interaction: {Interaction}", interaction);
-            return Ok();
+            _logger.LogInformation("Finished interaction.");
+            return Ok(JsonSerializer.Serialize(new InteractionResponse(InteractionCallbackType.Pong), _jsonSerializerOptions));
         }
     }
 }

@@ -81,7 +81,7 @@ namespace OoLunar.PollMaster3000
                 options.AddScheme<DiscordAuthenticationHandler>("Discord", "Discord");
             });
 
-            builder.Services.AddAuthorizationCore(options => options.AddPolicy("Discord", policy => policy.RequireAuthenticatedUser().RequireClaim("Discord", "true")));
+            builder.Services.AddAuthorizationCore(options => options.AddPolicy("Discord", policy => policy.RequireClaim("Discord")));
             builder.Services.AddWebEncoders();
             builder.Services.AddSingleton<ISystemClock, SystemClock>();
             builder.Services.AddControllers();
@@ -97,10 +97,9 @@ namespace OoLunar.PollMaster3000
             //    // TODO: PollMaster3000.Docs, using csproj Tasks, docfx and possibly github actions.
             //    FileProvider =
             //})
-            app.UseAuthorization();
             app.UseAuthentication();
-            app.UseRouting();
-            app.MapControllers();
+            app.UseAuthorization();
+            app.MapControllers().RequireAuthorization("Discord");
 
             return app.RunAsync();
         }
