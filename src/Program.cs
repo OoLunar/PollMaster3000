@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OoLunar.PollMaster3000.Authentication;
+using OoLunar.PollMaster3000.Controllers;
 using Remora.Discord.API.Extensions;
 using Serilog;
 using Serilog.Events;
@@ -74,6 +77,7 @@ namespace OoLunar.PollMaster3000
             builder.Logging.AddSerilog(logger, false);
             builder.Services.AddSerilog(logger, false);
             builder.Services.ConfigureDiscordJsonConverters();
+            builder.Services.AddSingleton(services => services.GetRequiredService<IOptionsSnapshot<JsonSerializerOptions>>().Get("Discord"));
             builder.Services.AddAuthenticationCore(options =>
             {
                 options.DefaultAuthenticateScheme = "Discord";
@@ -92,6 +96,7 @@ namespace OoLunar.PollMaster3000
             });
 
             WebApplication app = builder.Build();
+            DiscordController.DiscordJsonSerializerOptions = app.Services.GetRequiredService<IOptionsSnapshot<JsonSerializerOptions>>().Get("Discord");
             //app.UseStaticFiles(new StaticFileOptions()
             //{
             //    // TODO: PollMaster3000.Docs, using csproj Tasks, docfx and possibly github actions.
